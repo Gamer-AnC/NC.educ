@@ -1,0 +1,12 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Enable full read and write access for all collections to guarantee
+    // frictionless database operations for both Google-authenticated and 
+    // student-ID-authenticated players on the sandboxed preview environment.
+    
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

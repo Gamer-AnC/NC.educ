@@ -1,0 +1,8 @@
+{
+  "name": "NC.educ",
+  "description": "Connecting brilliant minds together. A peer tutoring platform for students to grow and excel.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

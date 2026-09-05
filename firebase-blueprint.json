@@ -1,0 +1,290 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and metadata",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "studentId": { "type": "number", "description": "Formula ID: x^2 + 3x + 1" },
+        "hasPaid": { "type": "boolean" },
+        "trialEndsAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "userSequence": { "type": "number", "description": "The sequence x used in formula" },
+        "photoUrl": { "type": "string" },
+        "questionCount": { "type": "number", "default": 0 }
+      },
+      "required": ["email", "studentId", "hasPaid", "createdAt", "userSequence"]
+    },
+    "Counter": {
+      "title": "Counter",
+      "description": "System counters for auto-incrementing fields",
+      "type": "object",
+      "properties": {
+        "count": { "type": "number" }
+      },
+      "required": ["count"]
+    },
+    "Tutor": {
+      "title": "Tutor",
+      "description": "Approved and registered tutor profile",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "email": { "type": "string" },
+        "subject": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "localNumber": { "type": "string" },
+        "bio": { "type": "string" },
+        "tutorCode": { "type": "string", "description": "Derived from 2X+1=0 logic" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "email", "subject", "tutorCode", "createdAt"]
+    },
+    "TutorApplication": {
+      "title": "TutorApplication",
+      "description": "Application record for becoming a tutor",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "subject": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "testing", "accepted", "rejected"] },
+        "score": { "type": "number" },
+        "performanceSummary": { "type": "string", "description": "AI generated summary of uploaded academic performance" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "subject", "status", "createdAt"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Administrator account profile",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "email": { "type": "string" },
+        "isBlocked": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name"]
+    },
+    "BannedAdmin": {
+      "title": "BannedAdmin",
+      "description": "Banned administrator details",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "bannedAt": { "type": "string", "format": "date-time" },
+        "bannedBy": { "type": "string" }
+      },
+      "required": ["name", "bannedBy"]
+    },
+    "AdminConfig": {
+      "title": "AdminConfig",
+      "description": "Administrative settings and passcode rotation config",
+      "type": "object",
+      "properties": {
+        "password": { "type": "string" },
+        "lastUpdatedBy": { "type": "string" },
+        "lastUpdatedMonth": { "type": "string" }
+      },
+      "required": ["password"]
+    },
+    "CourseRegistration": {
+      "title": "CourseRegistration",
+      "description": "Information collected when a student registers for a course/formation",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "contact": { "type": "string" },
+        "userId": { "type": "string" },
+        "formationTitle": { "type": "string" },
+        "priceText": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "active_call", "ended"] },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "contact", "userId", "formationTitle", "priceText", "status"]
+    },
+    "VideoCall": {
+      "title": "VideoCall",
+      "description": "Ongoing or archived live enrollment video calls initiated by administrative staff",
+      "type": "object",
+      "properties": {
+        "registrationId": { "type": "string" },
+        "studentUid": { "type": "string" },
+        "studentName": { "type": "string" },
+        "studentEmail": { "type": "string" },
+        "formationTitle": { "type": "string" },
+        "priceText": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "ended"] },
+        "messages": { "type": "array", "description": "Array of message objects synchronizing chat" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["registrationId", "studentUid", "studentName", "formationTitle", "status"]
+    },
+    "AdminPresence": {
+      "title": "AdminPresence",
+      "description": "Presence tracking to verify if an administrator is active online",
+      "type": "object",
+      "properties": {
+        "adminId": { "type": "string" },
+        "adminName": { "type": "string" },
+        "online": { "type": "boolean" },
+        "lastActive": { "type": "string", "format": "date-time" }
+      },
+      "required": ["adminId", "adminName", "online", "lastActive"]
+    },
+    "AdminTimeSpent": {
+      "title": "AdminTimeSpent",
+      "description": "Daily active session time tracking logs for administrator staff",
+      "type": "object",
+      "properties": {
+        "adminName": { "type": "string" },
+        "date": { "type": "string" },
+        "secondsSpent": { "type": "number" },
+        "lastActive": { "type": "string", "format": "date-time" }
+      },
+      "required": ["adminName", "date", "secondsSpent"]
+    },
+    "StudentChat": {
+      "title": "StudentChat",
+      "description": "Private 1-on-1 chat room between students",
+      "type": "object",
+      "properties": {
+        "participants": { "type": "array" },
+        "participantNames": { "type": "array" },
+        "participantEmails": { "type": "array" },
+        "lastMessage": { "type": "string" },
+        "lastMessageAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["participants", "createdAt"]
+    },
+    "StudentChatMessage": {
+      "title": "StudentChatMessage",
+      "description": "Message in private 1-on-1 student chat",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["senderId", "senderName", "text", "createdAt"]
+    },
+    "StudyGroup": {
+      "title": "StudyGroup",
+      "description": "Academic study group formed by students",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "subject": { "type": "string" },
+        "creatorId": { "type": "string" },
+        "creatorName": { "type": "string" },
+        "members": { "type": "array" },
+        "lastMessage": { "type": "string" },
+        "lastMessageAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "creatorId", "creatorName", "members", "createdAt"]
+    },
+    "StudyGroupMessage": {
+      "title": "StudyGroupMessage",
+      "description": "Message in group study chat room",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["senderId", "senderName", "text", "createdAt"]
+    },
+    "ExamPaper": {
+      "title": "ExamPaper",
+      "description": "Uploaded past examination papers and questions",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "type": { "type": "string" },
+        "subject": { "type": "string" },
+        "year": { "type": "string" },
+        "subsystem": { "type": "string" },
+        "difficulty": { "type": "string" },
+        "pdfUrl": { "type": "string" },
+        "questions": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "type", "subject", "year", "subsystem", "difficulty", "pdfUrl", "questions", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User collection"
+    },
+    "/counters/{counterId}": {
+      "schema": "Counter",
+      "description": "Global system counters"
+    },
+    "/tutors/{tutorId}": {
+      "schema": "Tutor",
+      "description": "Tutor profiles"
+    },
+    "/tutor_applications/{applicationId}": {
+      "schema": "TutorApplication",
+      "description": "Records of tutor applications and test results"
+    },
+    "/admins/{adminId}": {
+      "schema": "Admin",
+      "description": "Registered administrator items"
+    },
+    "/banned_admins/{adminId}": {
+      "schema": "BannedAdmin",
+      "description": "Banned administrators"
+    },
+    "/admins_config/{configId}": {
+      "schema": "AdminConfig",
+      "description": "Global settings configuration like rotated master passwords"
+    },
+    "/course_registrations/{registrationId}": {
+      "schema": "CourseRegistration",
+      "description": "Students registered for courses"
+    },
+    "/video_calls/{callId}": {
+      "schema": "VideoCall",
+      "description": "Video call sessions"
+    },
+    "/admins_presence/{adminId}": {
+      "schema": "AdminPresence",
+      "description": "Administrator presence signals"
+    },
+    "/admin_time_spent/{spentId}": {
+      "schema": "AdminTimeSpent",
+      "description": "Admin daily time spent tracking logs"
+    },
+    "/student_chats/{chatId}": {
+      "schema": "StudentChat",
+      "description": "Private chats collection"
+    },
+    "/student_chats/{chatId}/messages/{msgId}": {
+      "schema": "StudentChatMessage",
+      "description": "Sub-collection for private chat messages"
+    },
+    "/study_groups/{groupId}": {
+      "schema": "StudyGroup",
+      "description": "Study groups collection"
+    },
+    "/study_groups/{groupId}/messages/{msgId}": {
+      "schema": "StudyGroupMessage",
+      "description": "Sub-collection for group messages"
+    },
+    "/exam_papers/{paperId}": {
+      "schema": "ExamPaper",
+      "description": "Uploaded past exam papers and questions"
+    }
+  }
+}
